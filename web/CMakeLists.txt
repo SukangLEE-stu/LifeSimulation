@@ -5,6 +5,7 @@ project(web)
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories(include)
+include_directories(../utils/include)
 
 add_executable(web web.cpp)
 

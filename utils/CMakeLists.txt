@@ -6,4 +6,4 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(include)
 
-add_library(utils utils.cpp)
+add_library(utils SHARED utils.cpp)
