@@ -4,8 +4,9 @@
 
 #include "web.h"
 #include "utils.h"
-
+#include <iostream>
 int main() {
     helloWorld();
+    std::cout<<"hello!";
     return 0;
 }

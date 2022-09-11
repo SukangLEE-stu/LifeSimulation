@@ -4,9 +4,13 @@ project(web)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(include)
-include_directories(../utils/include)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+
+include_directories(
+        include
+        ../utils/include
+)
 
 add_executable(web web.cpp)
 
-target_link_libraries(utils)
+target_link_libraries(web utils)
