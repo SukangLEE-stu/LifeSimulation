@@ -2,8 +2,8 @@
 // Created by 李粟康 on 2022/9/11.
 //
 
-#ifndef UTILS_CREEP_H
-#define UTILS_CREEP_H
+#ifndef SCREEPS_CREEP_H
+#define SCREEPS_CREEP_H
 
 #include <string>
 
@@ -19,4 +19,4 @@ private:
     int ttl;
 };
 
-#endif //UTILS_CREEP_H
+#endif //SCREEPS_CREEP_H
