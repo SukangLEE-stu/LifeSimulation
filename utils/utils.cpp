@@ -6,6 +6,7 @@
 #include "utils.h"
 #include <fcntl.h>
 #include <sys/epoll.h>
+#include <unistd.h>
 // #include "../sys/epoll.h"
 
 using std::cout;
@@ -40,4 +41,23 @@ void addFd(int epollFd, int fd, bool oneShot, int TRIGMode) {
         event.events |= EPOLLONESHOT;
     epoll_ctl(epollFd, EPOLL_CTL_ADD, fd, &event);
     setNonBlocking(fd);
+}
+
+//从内核时间表删除描述符
+void removeFd(int epollFd, int fd) {
+    epoll_ctl(epollFd, EPOLL_CTL_DEL, fd, 0);
+    close(fd);
+}
+
+//将事件重置为EPOLLONESHOT
+void modFd(int epollFd, int fd, int ev, int TRIGMode) {
+    epoll_event event;
+    event.data.fd = fd;
+
+    if (1 == TRIGMode)
+        event.events = ev | EPOLLET | EPOLLONESHOT | EPOLLRDHUP;
+    else
+        event.events = ev | EPOLLONESHOT | EPOLLRDHUP;
+
+    epoll_ctl(epollFd, EPOLL_CTL_MOD, fd, &event);
 }

@@ -3,35 +3,30 @@
 //
 
 #include "web.h"
-#include "utils.h"
 
 #include <iostream>
-#include <mutex>
-#include <thread>
 
-int g_num = 0;
-std::mutex* g_mutex = new std::mutex();
-
-
-int main() {
-    helloWorld();
-    std::cout<<"hello!";
-    auto func = [](int id)->void {
-        for(int i = 0; i < 3; ++i) {
-            LockGuard* guard = new LockGuard(g_mutex);
-            g_num += 1;
-            std::cout<<"from id: "<<id<<", current num is: "<<g_num<<std::endl;
-            delete guard;
-            guard = nullptr;
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-        }
-    };
-    std::thread t1(func, 0);
-    std::thread t2(func, 1);
-    t1.join();
-    std::this_thread::sleep_for(std::chrono::milliseconds(450));
-    t2.join();
-
-
-    return 0;
+BaseWebServer::BaseWebServer() :
+    m_port(-1),
+    m_epollFd(-1),
+    m_closeLog(-1),
+    m_actorModel(-1),
+    m_OPT_LINGER(-1),
+    m_connectionTrigMode(-1),
+    m_listenFd(-1),
+    m_listenTrigMode(-1),
+    m_logWrite(-1),
+    m_root(nullptr),
+    m_threadNum(0),
+    m_threadPool(nullptr),
+    m_trigMode(-1) {
+    m_pipeFd[0] = -1;
+    m_pipeFd[1] = -1;
 }
+
+
+
+
+
+
+

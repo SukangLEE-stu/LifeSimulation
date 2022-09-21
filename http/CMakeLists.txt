@@ -8,7 +8,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 include_directories(
         include
-        ../utils
+        ../utils/include
 )
 
 add_library(http SHARED HttpConnection.cpp)
