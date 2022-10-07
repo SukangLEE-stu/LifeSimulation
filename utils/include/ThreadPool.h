@@ -9,7 +9,7 @@
 #include <list>
 #include <mutex>
 #include <vector>
-#include "Semaphore.h"
+#include "sem.h"
 
 template<typename T>
 class ThreadPool {

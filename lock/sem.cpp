@@ -2,7 +2,7 @@
 // Created by 李粟康 on 2022/9/19.
 //
 
-#include "Semaphore.h"
+#include "sem.h"
 using std::mutex;
 
 Semaphore::Semaphore(long count) : m_count(count) {}

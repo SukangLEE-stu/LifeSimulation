@@ -12,4 +12,4 @@ include_directories(
         ../http/include
 )
 
-add_library(config config.cpp include/config.h)
+add_library(config SHARED myConfig.cpp)

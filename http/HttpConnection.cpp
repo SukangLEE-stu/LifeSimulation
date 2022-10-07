@@ -9,6 +9,20 @@
 #include <sys/uio.h>
 #include <stdarg.h>
 
+
+namespace HTTP {
+    const char *ok_200_title = "OK";
+    const char *error_400_title = "Bad Request";
+    const char *error_400_form = "Your request has bad syntax or is inherently impossible to staisfy.\n";
+    const char *error_403_title = "Forbidden";
+    const char *error_403_form = "You do not have permission to get file form this server.\n";
+    const char *error_404_title = "Not Found";
+    const char *error_404_form = "The requested file was not found on this server.\n";
+    const char *error_500_title = "Internal Error";
+    const char *error_500_form = "There was an unusual problem serving the request file.\n";
+}
+
+
 using namespace HTTP;
 
 int HttpConnection::m_epollFd = -1;
@@ -20,7 +34,7 @@ int HttpConnection::m_userCount = 0;
 void HttpConnection::close(bool realClose) {
     if (realClose && (m_sockFd != -1)) {
         printf("close %d\n", m_sockFd);
-        removeFd(m_epollFd, m_sockFd);
+        Utils::getInstance()->removeFd(m_epollFd, m_sockFd);
         m_sockFd = -1;
         m_userCount--;
     }
@@ -32,7 +46,7 @@ void HttpConnection::init(int sockFd, const sockaddr_in &addr, char *root, int T
     m_sockFd = sockFd;
     m_address = addr;
 
-    addFd(m_epollFd, sockFd, true, m_TRIGMode);
+    Utils::getInstance()->addFd(m_epollFd, sockFd, true, m_TRIGMode);
     m_userCount++;
 
     //当浏览器出现连接重置时，可能是网站根目录出错或http响应格式出错或者访问的文件中内容完全为空
@@ -270,7 +284,7 @@ bool HttpConnection::write()
     int temp = 0;
 
     if (m_bytesToSend == 0) {
-        modFd(m_epollFd, m_sockFd, EPOLLIN, m_TRIGMode);
+        Utils::getInstance()->modFd(m_epollFd, m_sockFd, EPOLLIN, m_TRIGMode);
         init();
         return true;
     }
@@ -280,7 +294,7 @@ bool HttpConnection::write()
 
         if (temp < 0) {
             if (errno == EAGAIN) {
-                modFd(m_epollFd, m_sockFd, EPOLLOUT, m_TRIGMode);
+                Utils::getInstance()->modFd(m_epollFd, m_sockFd, EPOLLOUT, m_TRIGMode);
                 return true;
             }
             unmap();
@@ -300,7 +314,7 @@ bool HttpConnection::write()
 
         if (m_bytesToSend <= 0) {
             unmap();
-            modFd(m_epollFd, m_sockFd, EPOLLIN, m_TRIGMode);
+            Utils::getInstance()->modFd(m_epollFd, m_sockFd, EPOLLIN, m_TRIGMode);
 
             if (m_linger) {
                 init();
@@ -415,14 +429,14 @@ void HttpConnection::process()
     HTTP_CODE read_ret = processRead();
     if (read_ret == NO_REQUEST)
     {
-        modFd(m_epollFd, m_sockFd, EPOLLIN, m_TRIGMode);
+        Utils::getInstance()->modFd(m_epollFd, m_sockFd, EPOLLIN, m_TRIGMode);
         return;
     }
     bool write_ret = processWrite(read_ret);
     if (!write_ret) {
         close();
     }
-    modFd(m_epollFd, m_sockFd, EPOLLOUT, m_TRIGMode);
+    Utils::getInstance()->modFd(m_epollFd, m_sockFd, EPOLLOUT, m_TRIGMode);
 }
 
 sockaddr_in* HttpConnection::getAddress() {

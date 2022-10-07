@@ -2,8 +2,8 @@
 // Created by 李粟康 on 2022/9/21.
 //
 
-#ifndef CONFIG_CONFIG_H
-#define CONFIG_CONFIG_H
+#ifndef CONFIG_MYCONFIG_H
+#define CONFIG_MYCONFIG_H
 
 class Config
 {
@@ -11,7 +11,7 @@ public:
     Config();
     ~Config();
 
-    void parse_arg(int argc, char* argv[]);
+    void parse(int argc, char* argv[]);
 
     //端口号
     int m_PORT;
@@ -44,4 +44,4 @@ public:
     int m_actor_model;
 };
 
-#endif //CONFIG_CONFIG_H
+#endif //CONFIG_MYCONFIG_H

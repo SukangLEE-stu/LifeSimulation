@@ -20,7 +20,7 @@ public:
     BaseWebServer();
     virtual ~BaseWebServer();
 
-    void init();
+    void init(int port, int threadNum);
 
     void eventLoop();
 
@@ -28,6 +28,11 @@ public:
 
 
 private:
+    bool doConnect();
+    void m_doAdd(int fd, sockaddr_in addr);
+
+
+
     int m_port;
     char* m_root;
     int m_logWrite;
@@ -36,7 +41,7 @@ private:
 
     int m_pipeFd[2];
     int m_epollFd;
-    HttpConnection* users;
+    HttpConnection* m_users;
 
     /*
     //数据库相关

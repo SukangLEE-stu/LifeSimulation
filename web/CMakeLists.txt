@@ -13,6 +13,6 @@ include_directories(
         ../lock/include
 )
 
-add_library(web web.cpp WebServer.cpp)
+add_library(web SHARED web.cpp WebServer.cpp)
 
 target_link_libraries(web utils http)

@@ -10,4 +10,4 @@ include_directories(
         include
 )
 
-add_library(lock SHARED Semaphore.cpp)
+add_library(lock SHARED sem.cpp)
